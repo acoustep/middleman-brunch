@@ -6,6 +6,7 @@ module Middleman
 
     source_root File.expand_path(File.dirname(__FILE__))
 
+
     def copy_default_files
       directory 'template', '.', exclude_pattern: /\.DS_Store$/
     end
@@ -19,32 +20,36 @@ module Middleman
     end
 
     def ask_about_css
-      @sass_framework = ask("Which SASS Framework would you prefer?", ["Bootstrap", "Foundation", "Bourbon", "PureCSS", "None"])
+      @has_sass_framework = true
+      @sass_framework = ask("Which SASS Framework would you prefer?\n", ["Bootstrap", "Foundation", "Bourbon", "PureCSS", "None"])
       case @sass_framework
         when "Bootstrap"
           insert_into_file 'package.json', "    \"bootstrap-sass\": \"~3.0\",\n", after: "  \"devDependencies\": {\n"
-          puts "Added bootstrap-sass to package.json\n"
+        insert_into_file 'brunch-config.js', "\"node_modules/bootstrap-sass/assets/stylesheets\"\n", after: "        includePaths: [\n"
         when "Foundation"
           insert_into_file 'package.json', "    \"foundation-sites\": \"~6.0\",\n", after: "  \"devDependencies\": {\n"
-          puts "Added foundation-sites to package.json\n"
+        insert_into_file 'brunch-config.js', "\"node_modules/foundation-sites\"\n", after: "        includePaths: [\n"
         when "Bourbon"
           insert_into_file 'package.json', "    \"bourbon-neat\": \"~1.0\",\n", after: "  \"devDependencies\": {\n"
-          puts "Added bourbon-neat to package.json\n"
           insert_into_file 'package.json', "    \"node-bourbon\": \"~4.0\",\n", after: "  \"devDependencies\": {\n"
-          puts "Added node-bourbon to package.json\n"
+          insert_into_file 'brunch-config.js', "\"node_modules/bourbon/app/assets/stylesheets\"\n", after: "        includePaths: [\n"
+          insert_into_file 'brunch-config.js', "\"node_modules/bourbon-neat/app/assets/stylesheets\",\n", after: "        includePaths: [\n"
         when "PureCSS"
           insert_into_file 'package.json', "    \"purecss": "~0.6\",\n", after: "  \"devDependencies\": {\n"
-          puts "Added purecss to package.json\n"
         else
           puts "No CSS Framework selected\n"
+          @has_sass_framework = false
         end
     end
 
     def ask_about_font_awesome
       @use_font_awesome = yes?('Would you like to use Font Awesome?')
+      
+      @line_ending = (@has_sass_framework) ? ',' : ''
       if @use_font_awesome
         insert_into_file 'package.json', "    \"font-awesome\": \"^4.6.3\",\n", after: "  \"devDependencies\": {\n"
-        puts "Added font-awesome to package.json\n"
+        insert_into_file 'brunch-config.js', "\"node_modules/font-awesome/fonts\"\n", after: "      \"fonts\": [\n"
+        insert_into_file 'brunch-config.js', "\"node_modules/font-awesome/scss\"#{@line_ending}\n", after: "        includePaths: [\n"
       end
     end
 
@@ -52,7 +57,7 @@ module Middleman
       @use_turbolinks = yes?('Would you like to use Turbolinks?')
       if @use_turbolinks
         insert_into_file 'package.json', "    \"turbolinks\": \"^5.0.0\",\n", after: "  \"devDependencies\": {\n"
-        puts "Added turbolinks to package.json\n"
+        insert_into_file 'brunch-config.js', "      \"turbolinks\"\n", after: "    whitelist: [\n"
       end
     end
 
@@ -75,14 +80,6 @@ eos
       insert_into_file 'Gemfile', "gem 'middleman', '>= 4.0.0'\n", after: "# Middleman Gems\n"
     end
 
-    def install_packages
-      if yes?("Would you like to run npm install?")
-        inside(target) do
-          run("npm install", verbose: true)
-        end
-      end
-    end
-
     def ask_about_rackup
       if yes?('Do you want a Rack-compatible config.ru file?')
         template 'optional/config.ru', 'config.ru'
@@ -90,7 +87,8 @@ eos
     end
 
     def instructions
-      puts "Thank you for using middleman-brunch."
+      puts "Thank you for using middleman-brunch.\n"
+      puts "Please run npm install to finish the setup.\n"
     end
   end
 end
