@@ -17,7 +17,11 @@ page '/*.txt', layout: false
 #  which_fake_page: "Rendering a fake page with a local variable" }
 
 # General configuration
-
+activate :external_pipeline,
+  name: :brunch,
+  command: build? ? './node_modules/brunch/bin/brunch build --production --env production' : './node_modules/brunch/bin/brunch watch --stdin',
+  source: ".tmp/dist",
+  latency: 1
 ###
 # Helpers
 ###

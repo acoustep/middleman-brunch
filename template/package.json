@@ -1,0 +1,23 @@
+{
+  "name": "middleman-brunch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "brunch-config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "brunch": "^2.8.2",
+    "css-brunch": "~2.0.0",
+    "clean-css-brunch": "~2.0.0",
+    "copycat-brunch": "^1.1.0",
+    "sass-brunch": "^1.9.2",
+    "javascript-brunch": "~2.0.0",
+    "uglify-js-brunch": "~2.0.1"
+  },
+  "dependencies": {
+    "babel-brunch": "^6.0.6"
+  }
+}

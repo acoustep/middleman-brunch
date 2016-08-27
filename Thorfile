@@ -18,6 +18,18 @@ module Middleman
       @use_livereload = yes?('Do you want to use LiveReload?')
     end
 
+    def ask_about_css
+      @sass_framework = ask("Which SASS Framework would you prefer?", ["Bootstrap", "Foundation", "Bourbon", "PureCSS", "None"])
+    end
+
+    def ask_about_font_awesome
+      @use_font_awesome = yes?('Would you like to use Font Awesome?')
+    end
+
+    def ask_about_turbolinks
+      @use_turbolinks = yes?('Would you like to use Turbolinks?')
+    end
+
     def build_gemfile
       if @use_compass
         insert_into_file 'Gemfile', "gem 'middleman-compass', '>= 4.0.0'\n", after: "# Middleman Gems\n"
