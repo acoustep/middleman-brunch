@@ -68,6 +68,7 @@ exports.config = {
   npm: {
     enabled: true,
     whitelist: [
+      "jquery"
     ],
     globals: {
       $: 'jquery',
