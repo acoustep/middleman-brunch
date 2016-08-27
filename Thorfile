@@ -77,7 +77,9 @@ eos
 
     def install_packages
       if yes?("Would you like to run npm install?")
-        run("npm install")
+        inside(target) do
+          run("npm install", verbose: true)
+        end
       end
     end
 
@@ -92,4 +94,3 @@ eos
     end
   end
 end
-
