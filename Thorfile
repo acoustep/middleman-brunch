@@ -33,7 +33,7 @@ module Middleman
           insert_into_file 'package.json', "    \"node-bourbon\": \"~4.0\",\n", after: "  \"devDependencies\": {\n"
           puts "Added node-bourbon to package.json\n"
         when "PureCSS"
-          insert_into_file 'package.json', '    "purecss": "~0.6",\n', after: "  \"devDependencies\": {\n"
+          insert_into_file 'package.json', "    \"purecss": "~0.6\",\n", after: "  \"devDependencies\": {\n"
           puts "Added purecss to package.json\n"
         else
           puts "No CSS Framework selected\n"
@@ -42,10 +42,18 @@ module Middleman
 
     def ask_about_font_awesome
       @use_font_awesome = yes?('Would you like to use Font Awesome?')
+      if @use_font_awesome
+        insert_into_file 'package.json', "    \"font-awesome\": \"^4.6.3\",\n", after: "  \"devDependencies\": {\n"
+        puts "Added font-awesome to package.json\n"
+      end
     end
 
     def ask_about_turbolinks
       @use_turbolinks = yes?('Would you like to use Turbolinks?')
+      if @use_turbolinks
+        insert_into_file 'package.json', "    \"turbolinks\": \"^5.0.0\",\n", after: "  \"devDependencies\": {\n"
+        puts "Added turbolinks to package.json\n"
+      end
     end
 
     def build_gemfile
@@ -67,10 +75,20 @@ eos
       insert_into_file 'Gemfile', "gem 'middleman', '>= 4.0.0'\n", after: "# Middleman Gems\n"
     end
 
+    def install_packages
+      if yes?("Would you like to run npm install?")
+        run("npm install")
+      end
+    end
+
     def ask_about_rackup
       if yes?('Do you want a Rack-compatible config.ru file?')
         template 'optional/config.ru', 'config.ru'
       end
+    end
+
+    def instructions
+      puts "Thank you for using middleman-brunch."
     end
   end
 end
