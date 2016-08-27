@@ -20,6 +20,24 @@ module Middleman
 
     def ask_about_css
       @sass_framework = ask("Which SASS Framework would you prefer?", ["Bootstrap", "Foundation", "Bourbon", "PureCSS", "None"])
+      case @sass_framework
+        when "Bootstrap"
+          insert_into_file 'package.json', '    "bootstrap-sass": "~3.0"\n', after: '  "devDependencies": {\n'
+          puts "Added bootstrap-sass to package.json\n"
+        when "Foundation"
+          insert_into_file 'package.json', '    "foundation-sites": "~6.0"\n', after: '  "devDependencies": {\n'
+          puts "Added foundation-sites to package.json\n"
+        when "Bourbon"
+          insert_into_file 'package.json', '    "bourbon-neat": "~1.0"\n', after: '  "devDependencies": {\n'
+          puts "Added bourbon-neat to package.json\n"
+          insert_into_file 'package.json', '    "node-bourbon": "~4.0"\n', after: '  "devDependencies": {\n'
+          puts "Added node-bourbon to package.json\n"
+        when "PureCSS"
+          insert_into_file 'package.json', '    "purecss": "~0.6"\n', after: '  "devDependencies": {\n'
+          puts "Added purecss to package.json\n"
+        else
+          puts "No CSS Framework selected\n"
+        end
     end
 
     def ask_about_font_awesome
