@@ -24,7 +24,7 @@ module Middleman
       @sass_framework = ask("Which SASS Framework would you prefer?\n", ["Bootstrap", "Foundation", "Bourbon", "PureCSS", "None"])
       case @sass_framework
         when "Bootstrap"
-          insert_into_file 'package.json', "    \"bootstrap-sass\": \"~3.0\",\n", after: "  \"devDependencies\": {\n"
+          insert_into_file 'package.json', "    \"bootstrap-sass\": \"~3.3\",\n", after: "  \"devDependencies\": {\n"
         insert_into_file 'brunch-config.js', "\"node_modules/bootstrap-sass/assets/stylesheets\"\n", after: "        includePaths: [\n"
         when "Foundation"
           insert_into_file 'package.json', "    \"foundation-sites\": \"~6.0\",\n", after: "  \"devDependencies\": {\n"
